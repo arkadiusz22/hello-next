@@ -4,10 +4,10 @@ import ReactMarkdown from "react-markdown";
 import Layout from "../../components/Layout";
 import { PostProps } from "../../components/Post";
 
-import prisma from "../../lib/prisma";
+import { prismaClient } from "../../lib/prismaClient";
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const post = await prisma.post.findUnique({
+  const post = await prismaClient.post.findUnique({
     where: {
       id: String(params?.id),
     },

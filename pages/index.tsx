@@ -3,10 +3,10 @@ import { GetStaticProps } from "next";
 import Layout from "../components/Layout";
 import Post, { PostProps } from "../components/Post";
 
-import prisma from "../lib/prisma";
+import { prismaClient } from "../lib/prismaClient";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const feed = await prisma.post.findMany({
+  const feed = await prismaClient.post.findMany({
     where: { published: true },
     include: {
       author: {
