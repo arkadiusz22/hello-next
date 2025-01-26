@@ -20,11 +20,30 @@ model Post {
 }
 
 model User {
-  id            String       @default(cuid()) @id
+  id            String       @default(cuid()) @id @unique
+  auth_session Session[]
+  key          Key[]
   name          String?
-  email         String?   @unique
+  email         String   @unique
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   posts         Post[]
   @@map(name: "users")
+}
+
+model Session {
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  @@index([user_id])
+}
+
+model Key {
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  @@index([user_id])
 }
